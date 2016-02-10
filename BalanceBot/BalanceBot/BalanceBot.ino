@@ -1,19 +1,7 @@
-/* Define motor controll inputs */
-const int motorRPin1 = 8; // signal pin 1 for the right motor, connect to IN1               
-const int motorRPin2 = 7;  // signal pin 2 for the right motor, connect to IN2
-const int motorREnable = 5; // enable pin for the right motor (needs to be PWM enabled)
-
-const int motorLPin1 = 4; // signal pin 1 for the left motor, connect to IN3           
-const int motorLPin2 = 6; // signal pin 2 for the left motor, connect to IN4
-const int motorLEnable = 10; // enable pin for the left motor (needs to be PWM enabled)
-
-// Coefficients to balance motors
-const int motorLPower = 100;
-const int motorRPower = 100;
-
-// minimum and maximum PWM values for motors
-const int motorMin = 60; // minum PWM value where motor has sufficient torque
-const int motorMax = 255;
+/*  Arduino Self Balancing Robot
+ *  42Bots.com
+ *  ----------------------------
+*/
 
 // I2C device class (I2Cdev) demonstration Arduino sketch for MPU6050 class using DMP (MotionApps v2.0)
 // 6/21/2012 by Jeff Rowberg <jeff@rowberg.net>
@@ -57,6 +45,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ===============================================
 */
+
 // I2Cdev and MPU6050 must be installed as libraries, or else the .cpp/.h files
 // for both classes must be in the include path of your project
 #include "I2Cdev.h"
@@ -132,8 +121,6 @@ MPU6050 mpu;
 
 //#define OUTPUT_CUSTOM
 
-
-
 #define LED_PIN 13 // (Arduino is 13, Teensy is 11, Teensy++ is 6)
 bool blinkState = false;
 
@@ -168,24 +155,39 @@ void dmpDataReady() {
     mpuInterrupt = true;
 }
 
-
-
 // ================================================================
 // ===                      INITIAL SETUP                       ===
 // ================================================================
 
+/* Define motor controll inputs */
+const int motorRPin1 = 8; // signal pin 1 for the right motor, connect to IN1               
+const int motorRPin2 = 7;  // signal pin 2 for the right motor, connect to IN2
+const int motorREnable = 5; // enable pin for the right motor (needs to be PWM enabled)
+
+const int motorLPin1 = 4; // signal pin 1 for the left motor, connect to IN3           
+const int motorLPin2 = 6; // signal pin 2 for the left motor, connect to IN4
+const int motorLEnable = 10; // enable pin for the left motor (needs to be PWM enabled)
+
+// Coefficients to balance motors
+const int motorLPower = 100;
+const int motorRPower = 100;
+
+// minimum and maximum PWM values for motors
+const int motorMin = 60; // minum PWM value where motor has sufficient torque
+const int motorMax = 255;
+
 void setup() {
+  
     /* Set up motor controll pins as output */
     pinMode(motorLPin1,OUTPUT);        
     pinMode(motorLPin2,OUTPUT);
     pinMode(motorLEnable,OUTPUT);
-  
+    
     pinMode(motorRPin1,OUTPUT);        
     pinMode(motorRPin2,OUTPUT);
     pinMode(motorREnable,OUTPUT);
-
   
-    // join I2C bus (I2Cdev library doesn't do this automatically)
+  // join I2C bus (I2Cdev library doesn't do this automatically)
     #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
         Wire.begin();
         TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
@@ -262,14 +264,13 @@ void setup() {
     pinMode(LED_PIN, OUTPUT);
 }
 
-
-
 // ================================================================
 // ===                    MAIN PROGRAM LOOP                     ===
 // ================================================================
 
 void loop() {
-    // if programming failed, don't try to do anything
+  //Drive(200,0);
+  // if programming failed, don't try to do anything
     if (!dmpReady) return;
 
     // wait for MPU interrupt or extra packet(s) available
@@ -347,7 +348,7 @@ void loop() {
             Serial.print(ypr[1] * 180/M_PI);
             Serial.print("\t");
             Serial.println(ypr[2] * 180/M_PI);
-            Drive(200,200);
+            //Drive(200,0);
         #endif
 
         #ifdef OUTPUT_READABLE_REALACCEL
@@ -451,4 +452,7 @@ void Drive(int motorRSpeed, int motorLSpeed) {
      digitalWrite(motorLPin2, LOW);
   }
 }
+
+
+
 

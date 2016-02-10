@@ -33,7 +33,7 @@ void setup() {
 }
 
 void loop() {
-  Drive(200,0);
+  Drive(200,200);
 }
 
 void Drive(int motorRSpeed, int motorLSpeed) {
