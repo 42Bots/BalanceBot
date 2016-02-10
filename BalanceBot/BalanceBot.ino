@@ -187,7 +187,7 @@ void setup() {
     pinMode(motorRPin2,OUTPUT);
     pinMode(motorREnable,OUTPUT);
   
-  // join I2C bus (I2Cdev library doesn't do this automatically)
+    // join I2C bus (I2Cdev library doesn't do this automatically)
     #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
         Wire.begin();
         TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
@@ -269,7 +269,6 @@ void setup() {
 // ================================================================
 
 void loop() {
-  //Drive(200,0);
   // if programming failed, don't try to do anything
     if (!dmpReady) return;
 
@@ -348,7 +347,8 @@ void loop() {
             Serial.print(ypr[1] * 180/M_PI);
             Serial.print("\t");
             Serial.println(ypr[2] * 180/M_PI);
-            //Drive(200,0);
+            int correction = -(int)(ypr[1] * 180/M_PI * 75);
+            Drive(correction,correction);
         #endif
 
         #ifdef OUTPUT_READABLE_REALACCEL
